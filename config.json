@@ -9,10 +9,10 @@
         ],
         "receivingItems": [
             "2225761296",
-            "553970961", "110336757", "19264845"
+            "553970961", "110336757"
         ],
         "tags": [
-            "exampleTag"
+            "upgrade"
         ],
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     },
