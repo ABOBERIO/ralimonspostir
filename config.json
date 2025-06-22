@@ -17,7 +17,7 @@
     },
     "smartAlgo": {
         "enabled": true,
-        "upgrade": false,
+        "upgrade": true,
         "downgrade": false,
         "any": true,
         "minSendItems": 3,
@@ -25,8 +25,8 @@
         "minReceiveItems": 2,
         "maxReceiveItems": 4,
         "blacklisted": [
-            "BLACKLISTED_ITEM_ID_1",
-            "BLACKLISTED_ITEM_ID_2"
+            "56561579",
+            "88777059"
         ],
         "minTotalSend": 30000,
         "maxTotalSend": 1000000,
@@ -40,7 +40,7 @@
         "minItemValueSend": 5000,
         "minItemValueRequest": 5000,
         "tags": [
-            "adds"
+            "upgrade"
         ],
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     }
