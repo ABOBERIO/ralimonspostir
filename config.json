@@ -6,7 +6,7 @@
             "53039427", "334656210", "292969139", "19264845"
         ],
         "receivingItems": [
-            ""
+            "ITEM_ID_1", "ITEM_ID_2"
         ],
         "tags": [
             "any", "demand", "upgrade", "downgrade"
