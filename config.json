@@ -1,7 +1,7 @@
 {
     "chosingAlgorithm": "Specific Items will post ONLY what you tell it to, same ad every time. Smart algo generates an ad.",
     "specificItems": {
-        "enabled": true,
+        "enabled": false,
         "sendingItems": [
             "53039427", "334656210", "292969139", "19264845"
         ],
@@ -14,11 +14,11 @@
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     },
     "smartAlgo": {
-        "enabled": false,
+        "enabled": true,
         "upgrade": true,
         "downgrade": false,
         "any": false,
-        "minSendItems": 3,
+        "minSendItems": 2,
         "maxSendItems": 4,
         "minReceiveItems": 1,
         "maxReceiveItems": 4,
@@ -30,15 +30,15 @@
         "maxTotalSend": 1000000,
         "minTotalRequestValue": 30000,
         "maxTotalRequestValue": 1000000000,
-        "minUpgPercent": 0,
-        "maxUpgPercent": 3,
+        "minUpgPercent": 2,
+        "maxUpgPercent": 8,
         "minDgPercent": 3,
         "maxDgPercent": 10,
-        "minDemand": 2,
+        "minDemand": 1,
         "minItemValueSend": 5000,
         "minItemValueRequest": 5000,
         "tags": [
-            "upgrade"
+            "upgrade", "adds"
         ],
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     }
