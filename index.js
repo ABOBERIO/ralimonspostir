@@ -269,7 +269,7 @@ function generateAnyCombo(availableSendingItemsList, availableReceivingItemsList
         }
     }
     return null;
-} /* сдэлано чятом жпт убрать нахуй если не работает */
+} /* убрать нахуй если не работает */
 
 async function getItems() {
     let allItemIds = await handleFullInventory();
@@ -292,16 +292,24 @@ async function getItems() {
             return;
         }
         let availableSendingItemsList = [];
-        for (const item of allItemIds) {
-            if (!rolimonsValues[item]) {
-                console.log("⚠️ Missing value data for", item);
-                continue;
-            }
-            const { value } = rolimonsValues[item];
-            if (!config.smartAlgo.blacklisted.includes(item) && value >= config.smartAlgo.minItemValueSend) {
-                availableSendingItemsList.push(item);
-            }
+for (const item of allItemIds) {
+    if (!rolimonsValues[item]) {
+        console.log("⚠️ Missing value data for", item);
+        continue;
+    }
+    const { value } = rolimonsValues[item];
+
+    if (config.usePriorityOnly) {
+        if (config.priorityItems.includes(item)) {
+            availableSendingItemsList.push(item);
         }
+    } else {
+        if (!config.smartAlgo.blacklisted.includes(item) && value >= config.smartAlgo.minItemValueSend) {
+            availableSendingItemsList.push(item);
+        }
+    }
+} /* юз приоритета*/
+
         let availableReceivingItemsList = [];
         const allCatalogItems = Object.keys(rolimonsValues);
         for (const item of allCatalogItems) {
