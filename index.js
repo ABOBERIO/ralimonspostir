@@ -169,6 +169,7 @@ function generateUpgradeCombo(availableSendingItemsList, availableReceivingItems
     const maxAttempts = 100000;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
+        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         if (!sendingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueSend)) continue;
         const sendingValues = sendingCombo.map(item => rolimonsValues[item].value);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
@@ -176,6 +177,7 @@ function generateUpgradeCombo(availableSendingItemsList, availableReceivingItems
         const receivingCount = getRandomReceivingCount(smartConfig);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
+        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         if (!receivingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueRequest)) continue;
         const receivingValues = receivingCombo.map(item => rolimonsValues[item].value);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
@@ -196,6 +198,7 @@ function generateDowngradeCombo(availableSendingItemsList, availableReceivingIte
     const maxAttempts = 100000;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
+        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         if (!sendingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueSend)) continue;
         const sendingValues = sendingCombo.map(item => rolimonsValues[item].value);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
@@ -203,6 +206,7 @@ function generateDowngradeCombo(availableSendingItemsList, availableReceivingIte
         const receivingCount = getRandomReceivingCount(smartConfig);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
+        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         if (!receivingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueRequest)) continue;
         const receivingValues = receivingCombo.map(item => rolimonsValues[item].value);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
@@ -225,11 +229,13 @@ function generateAnyCombo(availableSendingItemsList, availableReceivingItemsList
         const numOfItemsSend = randomInt(smartConfig.minSendItems, smartConfig.maxSendItems);
         const modeUpgrade = Math.random() < 0.5;
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
+        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         const sendingValues = sendingCombo.map(item => rolimonsValues[item]?.value || 0);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
         const receivingCount = getRandomReceivingCount(smartConfig);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
+        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
         const receivingValues = receivingCombo.map(item => rolimonsValues[item]?.value || 0);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
         const maxSending = Math.max(...sendingValues);
@@ -263,7 +269,7 @@ function generateAnyCombo(availableSendingItemsList, availableReceivingItemsList
         }
     }
     return null;
-}
+} /* сдэлано чятом жпт убрать нахуй если не работает */
 
 async function getItems() {
     let allItemIds = await handleFullInventory();
