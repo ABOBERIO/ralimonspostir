@@ -165,111 +165,115 @@ function getRandomReceivingCount(smartConfig) {
     return randomInt(allowedMin, allowedMax);
 }
 
-function generateUpgradeCombo(availableSendingItemsList, availableReceivingItemsList, numOfItemsSend, rolimonsValues, smartConfig) {
+function generateUpgradeCombo(availableSendingItemsList, availableReceivingItemsList, numOfItemsSend, rolimonsValues, config) {
     const maxAttempts = 100000;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
-        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        if (!sendingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueSend)) continue;
+        if (sendingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
         const sendingValues = sendingCombo.map(item => rolimonsValues[item].value);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
-        if (S_total < smartConfig.minTotalSend || S_total > smartConfig.maxTotalSend) continue;
-        const receivingCount = getRandomReceivingCount(smartConfig);
+
+        const receivingCount = getRandomReceivingCount(config);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
-        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        if (!receivingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueRequest)) continue;
+        if (receivingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
         const receivingValues = receivingCombo.map(item => rolimonsValues[item].value);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
-        if (smartConfig.minTotalRequestValue && R_total < smartConfig.minTotalRequestValue) continue;
-        if (smartConfig.maxTotalRequestValue && R_total > smartConfig.maxTotalRequestValue) continue;
+
         const maxSending = Math.max(...sendingValues);
         const maxReceiving = Math.max(...receivingValues);
         if (maxSending >= maxReceiving) continue;
-        const lowerBound = R_total * (1 + smartConfig.minUpgPercent / 100);
-        const upperBound = R_total * (1 + smartConfig.maxUpgPercent / 100);
+
+        const lowerBound = R_total * (1 + config.minUpgPercent / 100);
+        const upperBound = R_total * (1 + config.maxUpgPercent / 100);
         if (S_total < lowerBound || S_total > upperBound) continue;
+
         return { finalSendingItems: sendingCombo, finalRequestingItems: receivingCombo };
     }
     return null;
-}
+} //опнова
 
-function generateDowngradeCombo(availableSendingItemsList, availableReceivingItemsList, numOfItemsSend, rolimonsValues, smartConfig) {
+function generateDowngradeCombo(availableSendingItemsList, availableReceivingItemsList, numOfItemsSend, rolimonsValues, config) {
     const maxAttempts = 100000;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
-        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        if (!sendingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueSend)) continue;
+        if (sendingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
         const sendingValues = sendingCombo.map(item => rolimonsValues[item].value);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
-        if (S_total < smartConfig.minTotalSend || S_total > smartConfig.maxTotalSend) continue;
-        const receivingCount = getRandomReceivingCount(smartConfig);
+
+        const receivingCount = getRandomReceivingCount(config);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
-        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        if (!receivingCombo.every(item => rolimonsValues[item].value >= smartConfig.minItemValueRequest)) continue;
+        if (receivingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
         const receivingValues = receivingCombo.map(item => rolimonsValues[item].value);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
-        if (smartConfig.minTotalRequestValue && R_total < smartConfig.minTotalRequestValue) continue;
-        if (smartConfig.maxTotalRequestValue && R_total > smartConfig.maxTotalRequestValue) continue;
+
         const maxSending = Math.max(...sendingValues);
         const maxReceiving = Math.max(...receivingValues);
         if (maxSending <= maxReceiving) continue;
-        const lowerBound = S_total * (1 + smartConfig.minDgPercent / 100);
-        const upperBound = S_total * (1 + smartConfig.maxDgPercent / 100);
+
+        const lowerBound = S_total * (1 + config.minDgPercent / 100);
+        const upperBound = S_total * (1 + config.maxDgPercent / 100);
         if (R_total < lowerBound || R_total > upperBound) continue;
+
         return { finalSendingItems: sendingCombo, finalRequestingItems: receivingCombo };
     }
     return null;
-}
+} //тоже опнова
 
-function generateAnyCombo(availableSendingItemsList, availableReceivingItemsList, rolimonsValues, smartConfig) {
+
+function generateAnyCombo(availableSendingItemsList, availableReceivingItemsList, rolimonsValues, config) {
     const maxAttempts = 100000;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const numOfItemsSend = randomInt(smartConfig.minSendItems, smartConfig.maxSendItems);
+        const numOfItemsSend = randomInt(config.minSendItems, config.maxSendItems);
         const modeUpgrade = Math.random() < 0.5;
+
         const sendingCombo = chooseRandomSubset(availableSendingItemsList, numOfItemsSend);
-        if (sendingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        const sendingValues = sendingCombo.map(item => rolimonsValues[item]?.value || 0);
+        if (sendingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
+        const sendingValues = sendingCombo.map(item => rolimonsValues[item].value);
         const S_total = sendingValues.reduce((a, b) => a + b, 0);
-        const receivingCount = getRandomReceivingCount(smartConfig);
+
+        const receivingCount = getRandomReceivingCount(config);
         if (!receivingCount) continue;
         const receivingCombo = chooseRandomSubset(availableReceivingItemsList, receivingCount);
-        if (receivingCombo.some(id => smartConfig.blacklisted.includes(id))) continue;
-        const receivingValues = receivingCombo.map(item => rolimonsValues[item]?.value || 0);
+        if (receivingCombo.some(id => !config.priorityItems.includes(id.toString()))) continue;
+
+        const receivingValues = receivingCombo.map(item => rolimonsValues[item].value);
         const R_total = receivingValues.reduce((a, b) => a + b, 0);
+
         const maxSending = Math.max(...sendingValues);
         const maxReceiving = Math.max(...receivingValues);
-        if (S_total < smartConfig.minTotalSend || S_total > smartConfig.maxTotalSend) continue;
-        if (R_total < smartConfig.minTotalRequestValue || R_total > smartConfig.maxTotalRequestValue) continue;
+
         if (modeUpgrade) {
-            const lower = R_total * (1 + smartConfig.minUpgPercent / 100);
-            const upper = R_total * (1 + smartConfig.maxUpgPercent / 100);
+            const lowerBound = R_total * (1 + config.minUpgPercent / 100);
+            const upperBound = R_total * (1 + config.maxUpgPercent / 100);
             if (maxSending >= maxReceiving) continue;
-            if (S_total >= lower && S_total <= upper) {
-                console.log("✅ Valid Upgrade Combo Found");
-                return {
-                    finalSendingItems: sendingCombo,
-                    finalRequestingItems: receivingCombo,
-                    type: "upgrade"
-                };
-            }
+            if (S_total < lowerBound || S_total > upperBound) continue;
+            return {
+                finalSendingItems: sendingCombo,
+                finalRequestingItems: receivingCombo,
+                type: "upgrade"
+            };
         } else {
-            const lower = S_total * (1 + smartConfig.minDgPercent / 100);
-            const upper = S_total * (1 + smartConfig.maxDgPercent / 100);
+            const lowerBound = S_total * (1 + config.minDgPercent / 100);
+            const upperBound = S_total * (1 + config.maxDgPercent / 100);
             if (maxSending <= maxReceiving) continue;
-            if (R_total >= lower && R_total <= upper) {
-                console.log("✅ Valid Downgrade Combo Found");
-                return {
-                    finalSendingItems: sendingCombo,
-                    finalRequestingItems: receivingCombo,
-                    type: "downgrade"
-                };
-            }
+            if (R_total < lowerBound || R_total > upperBound) continue;
+            return {
+                finalSendingItems: sendingCombo,
+                finalRequestingItems: receivingCombo,
+                type: "downgrade"
+            };
         }
     }
     return null;
-} /* убрать нахуй если не работает */
+}
+ //опнова 🗿🗿🗿🗿🗿
 
 async function getItems() {
     let allItemIds = await handleFullInventory();
@@ -298,19 +302,21 @@ for (const item of allItemIds) {
         continue;
     }
     const { value } = rolimonsValues[item];
+    const itemStr = item.toString();
 
     if (config.usePriorityOnly) {
-        if (config.priorityItems.includes(item)) {
+        if (config.priorityItems.includes(itemStr)) {
             availableSendingItemsList.push(item);
         }
     } else {
-        if (!config.smartAlgo.blacklisted.includes(item) && value >= config.smartAlgo.minItemValueSend) {
+        if (!config.smartAlgo.blacklisted.includes(itemStr) && value >= config.smartAlgo.minItemValueSend) {
             availableSendingItemsList.push(item);
         }
     }
-} /* юз приоритета*/
+}
 
-        let availableReceivingItemsList = [];
+// опнова
+let availableReceivingItemsList = [];
 const allCatalogItems = Object.keys(rolimonsValues);
 for (const item of allCatalogItems) {
     const { value, demand } = rolimonsValues[item];
