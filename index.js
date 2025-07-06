@@ -311,13 +311,26 @@ for (const item of allItemIds) {
 } /* юз приоритета*/
 
         let availableReceivingItemsList = [];
-        const allCatalogItems = Object.keys(rolimonsValues);
-        for (const item of allCatalogItems) {
-            const { value, demand } = rolimonsValues[item];
-            if (value >= config.smartAlgo.minItemValueRequest && demand >= config.smartAlgo.minDemand) {
-                availableReceivingItemsList.push(item);
-            }
+const allCatalogItems = Object.keys(rolimonsValues);
+for (const item of allCatalogItems) {
+    const { value, demand } = rolimonsValues[item];
+    const itemStr = item.toString();
+
+    if (config.usePriorityOnly) {
+        if (config.priorityItems.includes(itemStr)) {
+            availableReceivingItemsList.push(item);
         }
+    } else {
+        if (
+            value >= config.smartAlgo.minItemValueRequest &&
+            demand >= config.smartAlgo.minDemand &&
+            !config.smartAlgo.blacklisted.includes(itemStr)
+        ) {
+            availableReceivingItemsList.push(item);
+        }
+    }
+}
+
         //console.log("✅ Filtered Sending Items:", availableSendingItemsList.length, availableSendingItemsList);
         //console.log("✅ Filtered Receiving Items:", availableReceivingItemsList.length, availableReceivingItemsList);
         if (availableSendingItemsList.length === 0 || availableReceivingItemsList.length === 0) {
