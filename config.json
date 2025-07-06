@@ -138,7 +138,7 @@
   "17521857429",
   "76233968067050"
         ],
-        "usePriorityOnly": true
+        "usePriorityOnly": true,
         "minSendItems": 2,
         "maxSendItems": 4,
         "minReceiveItems": 1,
