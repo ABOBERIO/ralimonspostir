@@ -6,10 +6,10 @@
             "182509980", "553858732", "19704809"
         ],
         "receivingItems": [
-            "ITEM_ID_1", "ITEM_ID_2"
+            "439945661", "1365767", "4390891467"
         ],
         "tags": [
-            "any", "demand", "upgrade", "downgrade"
+            "demand"
         ],
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     },
