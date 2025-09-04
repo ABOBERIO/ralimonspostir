@@ -15,9 +15,9 @@
     },
     "smartAlgo": {
         "enabled": true,
-        "upgrade": true,
+        "upgrade": false,
         "downgrade": false,
-        "any": false,
+        "any": true,
         "priorityItems": [ "1029025",
              "1073690",
   "1081239",
