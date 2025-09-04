@@ -1,7 +1,7 @@
 {
     "chosingAlgorithm": "Specific Items will post ONLY what you tell it to, same ad every time. Smart algo generates an ad.",
     "specificItems": {
-        "enabled": true,
+        "enabled": false,
         "sendingItems": [
             "182509980", "440739240", "19704809", "439945661"
         ],
@@ -14,7 +14,7 @@
         "_tagOptions": ["adds", "upgrade", "downgrade", "any", "wishlist", "demand", "rares", "rap", "robux", "projecteds"]
     },
     "smartAlgo": {
-        "enabled": false,
+        "enabled": true,
         "upgrade": true,
         "downgrade": false,
         "any": false,
